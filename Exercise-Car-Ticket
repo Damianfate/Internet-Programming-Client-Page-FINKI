@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<style>
+    div {
+        margin: 6px;
+    }
+    #smetki{
+        display: flex;
+    }
+</style>
+<body>
+<h1 style="text-align: center">Osiguruvanje na vozilo</h1>
+<div>
+    ime: <input type="text" id="ime">
+</div>
+<div>
+    Prezime: <input type="text" id="prez">
+</div>
+<div>
+    Registarska tablica: <input type="text" id="tablica">
+</div>
+<div>
+    Godina na starost: <input type="text" id="godina">
+</div>
+<div> Soobrakjajna nezgoda:
+    <input type="radio" id="da">da
+    <input type="radio" id="ne">ne
+</div>
+<button onclick="sozdadi()">Generiraj Smetka</button>
+<h2>Smetki</h2>
+<h4>Vkupno smetki za plakjanje: <span id="vkupno"></span></h4>
+<div id="smetki">
+</div>
+<script>
+    let counter=0;
+    function sozdadi() {
+        let ime = document.getElementById("ime")
+        ime = ime.value;
+        let prezime = document.getElementById("prez")
+        prezime = prezime.value;
+        let tablica = document.getElementById("tablica")
+        tablica = tablica.value;
+        let godina = document.getElementById("godina")
+        godina = godina.value;
+        let nezgoda;
+        let da = document.getElementById("da")
+        let ne = document.getElementById("ne")
+        if (da.checked === true) {
+            nezgoda = "da"
+        } else if (ne.checked === false) {
+            nezgoda = "ne"
+        }
+        if (ime.length == 0 || prezime.length == 0 || tablica.length == 0 || godina.length == 0) {
+            alert("POPOLNI GI SITE")
+            return;
+        }
+        let podelno = tablica.split("-");
+        if (!isNaN(podelno[0]) || podelno[0].length !== 2 || isNaN(podelno[1]) || podelno[1].length !== 4 || !isNaN(podelno[2]) || podelno[2].length !== 2) {
+            alert("POGRSEN FORMAT NA TABLICA")
+            return;
+        }
+        let zlatna = Zlatnatablica(tablica)
+        let cena = 3000;
+        if (zlatna) {
+            cena += 1000;
+        }
+        let pole = document.getElementById("smetki");
+        let smetka = ""
+        if (nezgoda === "da" && parseInt(godina) > 30) {
+            cena += 500;
+            smetka = "<div style='border: black solid 1px; width: 300px;padding: 5px; background-color: red' class='${parseInt(godina) > 30 ? \"postara\" : \"ponova\"}'><div>" + ime + " " + prezime + "</div><div>" + tablica + "</div><div>Soobrakajki: Ima</div><div>Starost na vzoilo: " + godina + "</div><div>Za plakjanje: " + cena + "</div><button onclick='plati(this)'>Plati</button><button onclick='trgni(this)'>Izbrishi</button></div>"
+            pole.insertAdjacentHTML('beforeend', smetka);
+            counter+=1;
+        }
+        if (nezgoda === "da" && parseInt(godina) < 30) {
+            cena += 500;
+            smetka = "<div style='border: black solid 1px; width: 300px; padding: 5px; background-color: green' class='${parseInt(godina) > 30 ? \"postara\" : \"ponova\"}'><div>" + ime + " " + prezime + "</div><div>" + tablica + "</div><div>Soobrakajki: Ima</div><div>Starost na vzoilo: " + godina + "</div><div>Za plakjanje: " + cena + "</div><button onclick='plati(this)'>Plati</button><button onclick='trgni(this)'>Izbrishi</button></div>"
+            pole.insertAdjacentHTML('beforeend', smetka);
+            counter+=1;
+
+        }
+        if (nezgoda === "ne" && parseInt(godina) > 30) {
+            smetka = "<div style='border: black solid 1px; width: 300px; padding: 5px; background-color: red' class='${parseInt(godina) > 30 ? \"postara\" : \"ponova\"}'><div>" + ime + " " + prezime + "</div><div>" + tablica + "</div><div>Soobrakajki: Nema</div><div>Starost na vzoilo: " + godina + "</div><div>Za plakjanje: " + cena + "</div><button onclick='plati(this)'>Plati</button><button onclick='trgni(this)'>Izbrishi</button></div>"
+            pole.insertAdjacentHTML('beforeend', smetka);
+            counter+=1;
+
+        }
+        if (nezgoda === "ne" && parseInt(godina) < 30) {
+            smetka = "<div style='border: black solid 1px; width: 300px; padding: 5px; background-color: green ' class='${parseInt(godina) > 30 ? \"postara\" : \"ponova\"}'><div>" + ime + " " + prezime + "</div><div>" + tablica + "</div><div>Soobrakajki: Nema</div><div>Starost na vzoilo: " + godina + "</div><div>Za plakjanje: " + cena + "</div><button onclick='plati(this)'>Plati</button><button onclick='trgni(this)'>Izbrishi</button></div>"
+            pole.insertAdjacentHTML('beforeend', smetka);
+            counter+=1;
+        }
+
+        let span=document.getElementById("vkupno");
+        span.innerHTML=counter;
+
+    }
+    function Zlatnatablica(tb) {
+        let podelno = tb.split("-");
+        return podelno[0].length === 2 && (podelno[1] === "1111" || podelno[1] === "2222" || podelno[1] === "3333" || podelno[1] === "4444" || podelno[1] === "5555"
+            || podelno[1] === "6666" || podelno[1] === "7777" || podelno[1] === "8888" || podelno[1] === "9999") && podelno[2].length === 2;
+    }
+    function plati(obj){
+        obj.disabled=true;
+        obj.nextElementSibling.disabled=true;
+    }
+    function trgni(obj){
+        let kartica=obj.parentNode;
+        kartica.remove();
+        counter-=1;
+        let span=document.getElementById("vkupno");
+        span.innerHTML=counter;
+    }
+</script>
+
+</body>
+</html>
