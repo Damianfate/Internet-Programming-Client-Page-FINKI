@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        #pole{
+            width: 800px;
+            height: 600px;
+            display: inline-block;
+            border: 1px solid black;
+        }
+        p{
+            display: inline-block;
+            vertical-align: top;
+        }
+        .pravoagolnik{
+            display: inline-block;
+            border: 1px solid black;
+            position: absolute;
+        }
+        .grom{
+            display: inline-block;
+            position: absolute;
+            width: 5px;
+            height: 600px;
+            background-color: gold;
+        }
+    </style>
+</head>
+<body>
+<div id="pole">
+
+</div>
+<p>Poeni: <span id="poeni"></span></p>
+<script>
+    let brojGromovi=0;
+    let boi=["red","blue","orange","pink","green","yellow","purple"]
+    let data='[{"id":"1", "dir": "vertical", "width": "87px", "height":"43px", "score": 52, "left":50, "top":180},{"id":"2", "dir": "horizontal", "width": "112px", "height":"48px", "score": 2, "left":140, "top":250},{"id":"3", "dir": "vertical", "width": "47px", "height":"97px", "score": 37, "left":560, "top":380},{"id":"4", "dir": "vertical", "width": "71px", "height":"71px", "score": 150, "left":450, "top":350},{"id":"5", "dir": "horizontal", "width": "76px", "height":"95px", "score": 24, "left":650, "top":15},{"id":"6", "dir": "vertical", "width": "100px", "height":"132px", "score": 73, "left":200, "top":70} ]'
+    data=JSON.parse(data);
+    function popolnidiv(){
+        for (let i=0; i<data.length;i++){
+            let brojBoja=Math.floor(Math.random()*7)
+            let pravoagolnik="<div id='"+data[i].id+"' class='pravoagolnik' style='width: "+data[i].width+"; height: "+data[i].height+"; background-color:"+boi[brojBoja]+"; left: "+data[i].left+"px;top: "+data[i].top+"px' score='"+data[i].score+"' nasoka='"+data[i].dir+"' pravec='"+(i%2)+"'></div>"
+            document.getElementById("pole").innerHTML+=pravoagolnik;
+        }
+        start();
+    }
+
+    function start(){
+
+        for (let i=1;i<=data.length;i++){
+            let obj=document.getElementById(i);
+            if(obj.getAttribute("nasoka")==="vertical"){
+                let top=parseInt(obj.style.top.split("px")[0])
+                if(obj.getAttribute("pravec")==="0"){
+                    top-=2
+                    if(top<=0){
+                        obj.setAttribute("pravec",1);
+                    }
+                }else{
+                    top+=2
+                    let visina=parseInt(obj.style.height.split("px")[0])
+                    if(top+visina>=600){
+                        obj.setAttribute("pravec","0");
+                    }
+                }
+                obj.style.top=top+"px";
+            }
+            else{
+                let left=parseInt(obj.style.left.split("px")[0])
+                if(obj.getAttribute("pravec")==="0"){
+                    let shirina=parseInt(obj.style.width.split("px")[0])
+                    left+=2
+                    if(left+shirina>=800){
+                        obj.setAttribute("pravec","1");
+                    }
+                }else{
+                    left-=2
+                    if(left<=0){
+                        obj.setAttribute("pravec","0");
+                    }
+                }
+                obj.style.left=left+"px";
+            }
+        }
+
+        if(brojGromovi<3){
+            requestAnimationFrame(start);
+            grom()
+        }else{
+            requestAnimationFrame(start);
+        }
+    }
+    let poeni=0;
+    function grom(){
+        brojGromovi+=1;
+        let pozicijaGrom=Math.floor(Math.random()*800);
+        let grom="<div class='grom' style='left: "+pozicijaGrom+"px;'></div>"
+        document.getElementById("pole").innerHTML+=grom;
+        for(let i=1;i<data.length;i++){
+            let pravoagolnik=document.getElementById(i);
+            let start=parseInt(pravoagolnik.style.left.split("px")[0])
+            let kraj=start+parseInt(pravoagolnik.style.width.split("px")[0])
+            if(pozicijaGrom>=start && pozicijaGrom<=kraj){
+                poeni+=parseInt(pravoagolnik.getAttribute("score"))
+                pravoagolnik.style.display="none"
+                pravoagolnik.setAttribute("poeni", "0")
+            }
+        }
+        document.getElementById("poeni").innerHTML=poeni
+        if(brojGromovi<3){
+            setTimeout(chisti_grom,1000)
+        }
+    }
+    function chisti_grom(){
+        let gromovi=document.getElementsByClassName("grom");
+        for (let i=0; i<gromovi.length;i++){
+            gromovi[i].style.display="none";
+        }
+        start()
+    }
+    popolnidiv();
+
+</script>
+</body>
+</html>
