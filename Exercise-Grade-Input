@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<style>
+    div {
+        margin: 10px;
+    }
+
+    #nastrana {
+        position: absolute;
+        left: 432px;
+        top: -8px;
+    }
+
+    th, td {
+        border: black solid 1px;
+        text-align: center;
+        padding: 4px;
+    }
+
+    table {
+        border-collapse: collapse;
+    }
+</style>
+<body>
+<div>
+    <h1>Details</h1>
+    <div>
+        Name: <input type="text" id="ime">
+    </div>
+    <div>
+        Index: <input type="text" id="index">
+    </div>
+    <div>
+        Phone: <input type="text" id="phone">
+    </div>
+    <div>
+        Grade:
+        <input type="radio" id="pet"> 5
+        <input type="radio" id="shes"> 6
+        <input type="radio" id="sedim"> 7
+        <input type="radio" id="osum"> 8
+        <input type="radio" id="devet"> 9
+        <input type="radio" id="deset"> 10
+    </div>
+    <div>
+        Session:
+        <select id="mesec">
+            <option>January</option>
+            <option>June</option>
+            <option>September</option>
+        </select>
+    </div>
+    <button onclick="impStudent()">Import Student</button>
+    <h2>Students (average grade: <span id="average">0</span> )</h2>
+    <table id="tabela">
+        <thead>
+        <th>Name</th>
+        <th>Index</th>
+        <th>Phone</th>
+        <th>Grade</th>
+        <th>Session</th>
+        <th>Actions</th>
+        <tbody id="here">
+
+        </tbody>
+        </thead>
+    </table>
+    <div id="nastrana">
+        <h1>Revert History</h1>
+        <ul id="history">
+
+        </ul>
+    </div>
+</div>
+<script>
+    let counter = 0;
+    let suma = 0;
+
+    function impStudent() {
+        let name = document.getElementById("ime")
+        name = name.value;
+        let index = document.getElementById("index")
+        index = index.value;
+        let phone = document.getElementById("phone")
+        phone = phone.value;
+        let ocenka5 = document.getElementById("pet")
+        let ocenka6 = document.getElementById("shes")
+        let ocenka7 = document.getElementById("sedim")
+        let ocenka8 = document.getElementById("osum")
+        let ocenka9 = document.getElementById("devet")
+        let ocenka10 = document.getElementById("deset")
+        let sesion = document.getElementById("mesec")
+        sesion = sesion.value;
+        let ocna = 0;
+        if (ocenka5.checked === true) {
+            ocna = "5"
+        } else if (ocenka6.checked === true) {
+            ocna = "6"
+        } else if (ocenka7.checked === true) {
+            ocna = "7"
+        } else if (ocenka8.checked === true) {
+            ocna = "8"
+        } else if (ocenka9.checked === true) {
+            ocna = "9"
+        } else if (ocenka10.checked === true) {
+            ocna = "10"
+        }
+        if (name.length == 0 || index.length == 0 || phone.length == 0 || (ocenka5.checked == false && ocenka6.checked == false && ocenka7.checked == false && ocenka8.checked == false && ocenka9.checked == false && ocenka10.checked == false)) {
+            alert("POPOLNI GI SITE POLINJA")
+            return;
+        }
+        let tabela = document.getElementById("here");
+        let redica = "<tr><td>" + name + "</td><td>" + index + "</td><td>" + phone + "</td><td class='ocena'>" + ocna + "</td><td>" + sesion + "</td><td><button onclick='potvrdi(this)'>Confirm</button><button onclick='Izbrishi(this)'>Revert</button></td></tr>";
+        let red = "<tr><td>" + name + "</td></tr>"
+        tabela.innerHTML += redica;
+        counter++;
+        suma += parseInt(ocna);
+        let SrednaVrednostOceni = suma / counter;
+        let pole = document.getElementById("average");
+        pole.innerHTML = SrednaVrednostOceni;
+    }
+
+    function potvrdi(obj) {
+        let red = obj.parentNode.parentNode
+        red.style.backgroundColor = "lightgreen"
+        obj.disabled = true;
+        obj.nextElementSibling.disabled = true
+    }
+    // brishe eleemnt i go updateira counterot na stranata
+    function Izbrishi(obj){
+        let red = obj.parentNode.parentNode
+        let indekss=red.children[1].innerHTML
+        let ocena=red.children[3].innerHTML
+        let dodaden="<ol>"+indekss+"- grade"+ocena+"</ol>"
+        let kade=document.getElementById("history")
+        kade.innerHTML+=dodaden;
+        red.parentNode.removeChild(red)
+        counter--;
+        suma-=parseInt(ocena);
+        let SrednaVrednostOceni = suma / counter;
+        let pole = document.getElementById("average");
+        pole.innerHTML = SrednaVrednostOceni;
+    }
+</script>
+</body>
+</html>
