@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div><label>Ime</label> <input id="ime" type="text"></div>
+<div><label>Prezime</label> <input id="prezime" type="text"></div>
+<div><label>Email</label> <input id="mail" type="text"></div>
+<div><label>Vozrast</label>
+    <select id="age">
+        <option value="19">19</option>
+        <option value="20">20</option>
+        <option value="21">21</option>
+        <option value="22">22</option>
+        <option value="23">23</option>
+    </select>
+</div>
+<div>
+    <button id="btn" onclick="send()"> prati</button>
+</div>
+<input type="text" disabled="disabled" id="msg">
+</body>
+<script>
+    function send(){
+        let x=document.getElementById('ime').value;
+        let prez=document.getElementById('prezime').value;
+        let mail=document.getElementById('mail').value;
+        let vozrast=document.getElementById('age').value;
+        if(x==""||prez==""||mail==""||vozrast==""){
+            alert("Popolni gi site polinja");
+        }
+        else{
+            let str="Господине "+x+" "+prez+" дали сте сигурни";
+            if(confirm(str)){
+                this.document.getElementById('msg').value="Podatocite se uspesno ispreateni";
+            }
+            else{
+                alert("Вашите податоци не се испратени");
+            }
+        }
+    }
+</script>
+</html>
