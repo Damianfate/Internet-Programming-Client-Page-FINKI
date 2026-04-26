@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+</head>
+<style>
+    .meurche{
+        width: 200px;
+        height: 200px;
+        display: inline-block;
+        border: solid black 1px;
+        text-align: center;
+        position: absolute;
+    }
+</style>
+<body>
+<h1>Live Weather Forecast</h1>
+<div>
+    <label>Enter the city Name:</label><input id="city" type="text">
+</div>
+<div>
+    <label>Enter days:(between 1 and 7)</label><input id="numdays" type="text">
+</div>
+<button onclick="prikaz()">
+    Show Weather
+</button>
+<div id="addSelect">
+
+</div>
+<div id="weather">
+
+</div>
+<script>
+    let weather=[];
+    async function FetchData(){
+        let days=document.getElementById("numdays")
+        days=days.value;
+        let city=document.getElementById("city")
+        city=city.value;
+        let url="https://api.weatherapi.com/v1/forecast.json?key=6f95e0f327684844be3210911251101&q="+city+"&days="+days
+        let response=await fetch(url)
+        weather=await response.json()
+        console.log(weather);
+    }
+    function prikaz(){
+        FetchData()
+        let weatherForDays=""
+        weatherForDays=weather.forecast.forecastday;
+        document.getElementById("addSelect").innerHTML="<select onchange='chartOrDraw()' id='selekt'>\n" +
+            "    <option value=\"day\">Bubbles</option>\n" +
+            "    <option value=\"chart\">Chart</option>\n" +
+            "</select>"
+        let niza=document.getElementById("weather")
+        for (let i=0; i<weatherForDays.length; i++){
+            let min=weatherForDays[i].mintemp_c;
+            console.log(min)
+
+            let divEl="<div class='meurche'>Date:"+weatherForDays[i].date+"<br>Minimum Temp:"+weatherForDays[i].mintemp_c+"<br> Maximum Temp:"+weatherForDays[i].maxtemp_c+"</div>"
+        niza.innerHTML+=divEl;
+        }
+    }
+</script>
+</body>
+</html>
