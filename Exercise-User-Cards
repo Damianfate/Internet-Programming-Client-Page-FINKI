@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <style>
+
+
+    </style>
+
+</head>
+<body>
+<div>
+    <div>Username <input type="text" id="username"></div>
+    <div>ID <input type="text" id="ID"></div>
+    <div>Width <input type="text" id="width"></div>
+    <div>Height <input type="text" id="height"></div>
+    <div>Color <select id="color"><option>red</option><option>blue</option></select></div>
+</div>
+<div><button onclick="add()"> Add</button></div>
+
+<h3>Вкупно продадени: <span id="vkupno"> </span></h3>
+
+<div id="cards">
+
+
+</div>
+
+
+
+
+
+
+<script>
+
+    function add(){
+        let name = document.getElementById("username").value
+        let ID = document.getElementById("ID").value
+        let width = document.getElementById("width").value
+        let height = document.getElementById("height").value
+        let color = document.getElementById("color").value
+        let vkupno = document.getElementById("vkupno").value
+
+
+        if (name===0||ID===0||width===0||height===0){
+            alert("Ne smee prazni polinja")
+            return
+        }
+
+        let proverka1=/\d/
+        let proverka2=/[A-Z]/
+
+        if(proverka1.test(name)||proverka2.test(name)) {
+            alert("Ne smee golemi bukvi i ne smee brojki")
+            return
+        }
+
+
+        let existingCard = document.getElementById(ID);
+        if (existingCard) {
+            existingCard.innerHTML= "<p class='ID'>ID: "+ID+"</p>"+"<p class='width'>Width: "+width+"</p>"+"<p class='height'>Height: "+height+"</p>"+
+                "<p class='color'>Color: "+color+"</p>" + "<button onclick='sold(\"" + ID + "\")'>Sold</button>"
+
+            existingCard.style.width=width+"px"
+            existingCard.style.height=height+"px"
+            existingCard.style.backgroundColor=color
+
+
+        }
+        else {
+            let card=document.createElement("div")
+            card.id = ID
+
+            card.innerHTML="<p class='ID'>ID: "+ID+"</p><p class='width'>Width: "+width+"</p><p class='height'>Height: "+height+"</p>" +
+                "<p class='color'>Color: "+color+"</p>" + "<button onclick='sold(\"" + ID + "\")'>Sold</button>"
+            card.style.backgroundColor = color
+            card.style.width = width + "px"
+            card.style.height = height + "px"
+
+            let karticki=document.getElementById("cards")
+            karticki.appendChild(card)
+
+        }
+
+
+    }
+    function sold(ID){
+        let card = document.getElementById(ID);
+        if (card){
+            card.remove()
+        }
+    }
+
+</script>
+
+
+</body>
+</html>
