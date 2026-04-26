@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<style>
+    th, td {
+        border: black 1px solid;
+    }
+
+    table {
+        border-collapse: collapse;
+    }
+
+    div {
+        margin: 6px;
+    }
+
+</style>
+<body>
+<h1 style="text-align: center">Online shop</h1>
+<div>
+    Nmae and surname: <input type="text" id="ime">
+</div>
+<div>
+    Item: <input type="text" id="item">
+</div>
+<div>
+    Itemcode: <input type="text" id="code">
+</div>
+<div>
+    Item decription: <input type="text" id="desc">
+</div>
+<div>
+    Price: <input type="text" id="price">
+</div>
+<div>
+    Used: <select id="select">
+    <option>Used</option>
+    <option>Never Used</option>
+</select>
+</div>
+<button onclick="dodaj()">Add</button>
+<h2>Actime items <span id="span"></span></h2>
+<div>
+    <table id="used">
+        <thead>
+        <th>name</th>
+        <th>item</th>
+        <th>price</th>
+        <th>code</th>
+        <th>number</th>
+        <th>Actions</th>
+        </thead>
+        <tbody id="tbelcheUsed"></tbody>
+
+    </table>
+</div>
+<div>
+    <table id="Unused">
+        <thead>
+        <th>name</th>
+        <th>item</th>
+        <th>price</th>
+        <th>code</th>
+        <th>number</th>
+        <th>Actions</th>
+        </thead>
+        <tbody id="tbelcheUnused"></tbody>
+    </table>
+</div>
+
+<script>
+    let counter = 0;
+
+    function dodaj() {
+        let ime = document.getElementById("ime").value;
+        let item = document.getElementById("item").value;
+        let code = document.getElementById("code").value;
+        let price = document.getElementById("price").value;
+        let used = document.getElementById("select").value;
+        if (ime === "" || item === "" || code === "" || price === "") {
+            alert("POPLNI SE")
+            return;
+        }
+        if(price<0){
+            alert("VNESI BROJ ZA CENA")
+        }
+
+        price*=0.1;
+        let orgCode=code;
+        for (let i=0; i<10;i++){
+            code=code.replaceAll(i,"")
+        }
+        code=code.replaceAll("!","")
+        let tabelaUsed=document.getElementById("tbelcheUsed")
+        let tabelaUnused=document.getElementById("tbelcheUnused")
+        if(used=="Used"){
+            let red=tabelaUsed.getElementsByTagName("tr")
+            for(let i=0; i<red.length;i++){
+                if(red[i].id===code){
+                    alert("NE SMEES DA GO DODADES")
+                    return;
+                }
+            }
+            let redica = "<tr id='"+code+"'><td>" + ime + "</td><td>" + item + "</td><td>" + price + "</td><td>" + orgCode + "</td><td>"+code+"</td><td><button onclick='sell()'>Sold</button></td></tr>"
+            tabelaUsed.insertAdjacentHTML("beforeend",redica)
+            counter+=1;
+            let pole=document.getElementById("span")
+            pole.innerHTML=counter;
+        }
+        if(used=="Never Used"){
+            let red=tabelaUnused.getElementsByTagName("tr")
+            for(let i=0; i<red.length;i++){
+                if(red[i].id===code){
+                    alert("NE SMEES DA GO DODADES")
+                    return;
+                }
+            }
+            let redica = "<tr id='"+code+"'><td>" + ime + "</td><td>" + item + "</td><td>" + price + "</td><td>" + orgCode + "</td><td>"+code+"</td><td><button onclick='sell(this)'>Sold</button></td></tr>"
+            tabelaUnused.insertAdjacentHTML("beforeend",redica)
+            counter+=1;
+            let pole=document.getElementById("span")
+            pole.innerHTML=counter;
+        }
+
+    }
+    function sell(obj){
+        obj.innerHTML=" "
+        let red=obj.parentNode.parentNode;
+        red.style.backgroundColor="yellow"
+    }
+</script>
+</body>
+</html>
