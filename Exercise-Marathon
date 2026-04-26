@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<style>
+    div{
+        margin: 14px;
+    }
+    table{
+        border-collapse: collapse;
+    }
+    th,td {
+        border: black solid 1px;
+        padding: 4px;
+    }
+</style>
+<body>
+<h1 style="text-align: center">Ucesnici na maratonot</h1>
+<div>
+    Ime: <input type="text" id="ime">
+</div>
+<div>
+    Prezime: <input type="text" id="prezime">
+</div>
+<div>
+    Godina: <input type="text" id="godina">
+</div>
+<div>
+    Kod: <input type="text" id="kod">
+</div>
+<div>Pol:
+    <select id="pol">
+
+        <option>Maz</option>
+        <option>Zena</option>
+    </select>
+</div>
+<button onclick="dodadi()">Dodadi</button>
+<div>
+    <table>
+        <thead><th>Ime</th><th>Prezime</th><th>Tag</th><th>Opcii</th></thead>
+        <tbody id="tabelche">
+
+        </tbody>
+    </table>
+</div>
+<div>
+    <h2>Vkupno Potvrdeni Ucesnici:<span id="potvrdeni"></span></h2>
+</div>
+<script>
+    let brojach=0;
+    let redica=""
+    function dodadi(){
+        let ime=document.getElementById("ime")
+        ime=ime.value;
+        let prezime=document.getElementById("prezime")
+        prezime=prezime.value;
+        let godina=document.getElementById("godina")
+        godina=godina.value;
+        let pol=document.getElementById("pol")
+        pol=pol.value
+        let kod=document.getElementById("kod")
+        kod=kod.value;
+        let tabela=document.getElementById("tabelche")
+
+        if(ime.length==0 || prezime.length==0||kod.length==0 || godina.length==0){
+            alert("POPOLNI GI SITE POLINJA")
+            return;
+        }
+        if(parseInt(godina)<=18){
+            let redica = "<tr><td>" + ime + "</td><td>" + prezime + "</td><td>" + kod + "</td><td><button disabled='disabled'>Potvrdi</button><button disabled='disabled'>Izbrishi</button></td></tr>"
+            tabela.innerHTML+=redica
+            if(pol==="Maz"){
+                tabela.querySelector("tr").style.backgroundColor="lightblue"
+            }
+        else if(pol==="Zena"){
+                tabela.querySelector("tr").nextSibling.style.backgroundColor="lightpink"
+            }
+        }
+        else{
+            let redica = "<tr><td>" + ime + "</td><td>" + prezime + "</td><td>" + kod + "</td><td><button onclick='pot(this)'>Potvrdi</button><button onclick='izbrishi(this)'>Izbrishi</button></td></tr>"
+            tabela.innerHTML+=redica
+            if(pol==="Maz"){
+                tabela.querySelector("tr").style.backgroundColor="lightblue"
+            }
+            else if(pol==="Zena"){
+                tabela.querySelector("tr").nextSibling.style.backgroundColor="lightpink"
+            }
+
+        }
+
+    }
+    function pot(obj){
+        obj.disabled=true
+        obj.nextElementSibling.disabled=true
+        brojach+=1
+        let elem=document.getElementById("potvrdeni")
+        elem.innerHTML=brojach;
+    }
+    function izbrishi(obj){
+        let par=obj.parentNode.parentNode
+        par.remove();
+    }
+    function maketag(code){
+
+        let tag="";
+        for (let i=0; i<code.length; i++){
+            if(isNaN(code[i])){
+                if(code[i].toLowerCase()===code[i]){
+                    tag+=code[i].toUpperCase();
+                }
+                else if(code[i].toUpperCase()===code[i]){
+                    tag+=code[i].toLowerCase();
+                }
+            }
+            if(parseInt(code[i])<=5){
+                continue;
+            }
+            else{
+                tag+=code[i];
+            }
+        }
+        return tag;
+    }
+</script>
+</body>
+</html>
